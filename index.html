@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="google" content="notranslate">
+<meta name="robots" content="notranslate">
+<title>Simple Past - English A1+ | COEDUCA</title>
+<link rel="stylesheet" href="styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body class="notranslate" translate="no">
+
+<!-- PANTALLA DE ACCESO -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <div class="mascot" id="mascot">🤖</div>
+    <h1>¡Hola! Bienvenido</h1>
+    <p class="subtitle">Soy tu compañero de aprendizaje</p>
+    <p class="tema-header">📚 Tema: <strong>Simple Past</strong></p>
+    <p class="instruction">Ingresa tu NIE para comenzar:</p>
+    <input type="text" id="nieInput" placeholder="Ej: 12379" inputmode="numeric" autocomplete="off">
+    <button id="loginBtn" class="btn-primary">Entrar ✨</button>
+    <p id="loginError" class="error-msg"></p>
+  </div>
+</div>
+
+<!-- APP PRINCIPAL -->
+<div id="mainApp" class="main-app hidden">
+
+  <!-- ENCABEZADO -->
+  <header class="app-header">
+    <div class="header-content">
+      <div class="school-info">
+        <h2>COEDUCA</h2>
+        <p>English A1+ · Sección A · Simple Past</p>
+        <p>Profesor: José Eliseo Martínez</p>
+      </div>
+      <div class="student-info" id="studentInfo">
+        <p><strong>Nombre:</strong> <span id="studentName">-</span></p>
+        <p><strong>NIE:</strong> <span id="studentNie">-</span></p>
+        <p><strong>Grado:</strong> <span id="studentGrade">-</span></p>
+        <div id="partnersContainer"></div>
+        <button id="addPartnerBtn" class="btn-small">+ Agregar compañero</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- EXERCISES CONTAINER -->
+  <main id="exercisesContainer"></main>
+
+  <!-- BOTÓN DESCARGAR -->
+  <div class="download-section">
+    <div id="scoreDisplay" class="score-display">
+      <p>Tu nota actual: <span id="currentScore">0.0</span> / 10</p>
+      <p class="score-detail" id="scoreDetail"></p>
+    </div>
+    <button id="calculateBtn" class="btn-primary btn-large">📊 Calcular nota</button>
+    <button id="downloadBtn" class="btn-primary btn-large">📄 Descargar PDF</button>
+    <button id="resetBtn" class="btn-secondary">🔄 Reiniciar todo</button>
+  </div>
+
+  <footer>
+    <p>© COEDUCA · Prof. José Eliseo Martínez</p>
+  </footer>
+</div>
+
+<!-- MODAL COMPAÑERO -->
+<div id="partnerModal" class="modal hidden">
+  <div class="modal-content">
+    <h3>Agregar compañero</h3>
+    <input type="text" id="partnerNie" placeholder="NIE del compañero" inputmode="numeric">
+    <div class="modal-buttons">
+      <button id="confirmPartnerBtn" class="btn-primary">Agregar</button>
+      <button id="cancelPartnerBtn" class="btn-secondary">Cancelar</button>
+    </div>
+    <p id="partnerError" class="error-msg"></p>
+  </div>
+</div>
+
+<script src="students.js"></script>
+<script src="exercises.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
