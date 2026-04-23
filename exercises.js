@@ -9,8 +9,8 @@ const EXERCISES_POOL = {
   multipleChoice: [
     {
       type: 'multipleChoice',
-      title: 'Seleccion multiple: Elige la forma correcta del pasado',
-      instructions: 'Selecciona la respuesta correcta para completar cada oracion en pasado simple.',
+      title: '✅ Seleccion multiple: Elige la forma correcta del pasado',
+      instructions: '🎯 Selecciona la respuesta correcta para completar cada oracion en pasado simple.',
       questions: [
         { q: 'Yesterday, I ___ to the park.', options: ['go', 'went', 'goed', 'gone'], answer: 1 },
         { q: 'She ___ her homework last night.', options: ['did', 'done', 'do', 'does'], answer: 0 },
@@ -21,8 +21,8 @@ const EXERCISES_POOL = {
     },
     {
       type: 'multipleChoice',
-      title: 'Seleccion multiple: Verbos en pasado',
-      instructions: 'Elige la opcion correcta en pasado simple.',
+      title: '✅ Seleccion multiple: Verbos en pasado',
+      instructions: '🎯 Elige la opcion correcta en pasado simple para cada oracion.',
       questions: [
         { q: 'My mother ___ a cake last Sunday.', options: ['bake', 'baked', 'baking', 'bakes'], answer: 1 },
         { q: 'I ___ my keys this morning.', options: ['lose', 'losed', 'lost', 'losing'], answer: 2 },
@@ -37,8 +37,8 @@ const EXERCISES_POOL = {
   fillInTheBlank: [
     {
       type: 'fillInTheBlank',
-      title: 'Completa el espacio en blanco',
-      instructions: 'Escribe el verbo en pasado simple correctamente. No importan mayusculas o minusculas.',
+      title: '✏️ Completa el espacio en blanco',
+      instructions: '⌨️ Escribe el verbo en pasado simple correctamente. No importan mayusculas, minusculas ni espacios extra.',
       sentences: [
         { parts: ['Last summer, we ', ' (travel) to Mexico.'], answer: 'traveled', alt: ['travelled'] },
         { parts: ['She ', ' (study) English for two hours yesterday.'], answer: 'studied' },
@@ -49,8 +49,8 @@ const EXERCISES_POOL = {
     },
     {
       type: 'fillInTheBlank',
-      title: 'Rellena con el verbo correcto en pasado',
-      instructions: 'Conjuga el verbo en parentesis en pasado simple.',
+      title: '✏️ Rellena con el verbo correcto en pasado',
+      instructions: '⌨️ Conjuga el verbo en parentesis en pasado simple y escribelo en el espacio.',
       sentences: [
         { parts: ['My brother ', ' (run) in the marathon yesterday.'], answer: 'ran' },
         { parts: ['The cat ', ' (sleep) all day.'], answer: 'slept' },
@@ -65,8 +65,8 @@ const EXERCISES_POOL = {
   dragDropWords: [
     {
       type: 'dragDropWords',
-      title: 'Arrastra las palabras al lugar correcto',
-      instructions: 'Arrastra cada verbo en pasado desde el banco al espacio correcto de la oracion.',
+      title: '🖐️ Arrastra las palabras al lugar correcto',
+      instructions: '👇 Arrastra cada verbo en pasado desde el banco al espacio correcto de la oracion.',
       wordBank: ['watched', 'ate', 'went', 'played', 'saw'],
       sentences: [
         { parts: ['I ', ' TV last night.'], answer: 'watched' },
@@ -78,8 +78,8 @@ const EXERCISES_POOL = {
     },
     {
       type: 'dragDropWords',
-      title: 'Arrastra y completa las oraciones',
-      instructions: 'Coloca el verbo correcto en pasado simple en cada espacio.',
+      title: '🖐️ Arrastra y completa las oraciones',
+      instructions: '👇 Coloca el verbo correcto en pasado simple en cada espacio arrastrandolo.',
       wordBank: ['bought', 'wrote', 'drank', 'ran', 'slept'],
       sentences: [
         { parts: ['My mom ', ' a new phone.'], answer: 'bought' },
@@ -95,8 +95,8 @@ const EXERCISES_POOL = {
   unscrambleWords: [
     {
       type: 'unscrambleWords',
-      title: 'Ordena las letras para formar verbos en pasado',
-      instructions: 'Reordena las letras para formar el verbo en pasado simple correcto.',
+      title: '🔤 Ordena las letras para formar verbos en pasado',
+      instructions: '🧩 Reordena las letras desordenadas para formar el verbo en pasado simple correcto.',
       words: [
         { scrambled: 'T-N-E-W', answer: 'WENT', hint: '(verbo go en pasado)' },
         { scrambled: 'Y-A-D-L-E-P', answer: 'PLAYED', hint: '(verbo play en pasado)' },
@@ -107,8 +107,8 @@ const EXERCISES_POOL = {
     },
     {
       type: 'unscrambleWords',
-      title: 'Forma el verbo en pasado correcto',
-      instructions: 'Ordena las letras desordenadas para formar el verbo en pasado simple.',
+      title: '🔤 Forma el verbo en pasado correcto',
+      instructions: '🧩 Ordena las letras desordenadas para escribir el verbo en pasado simple.',
       words: [
         { scrambled: 'D-I-D', answer: 'DID', hint: '(verbo do en pasado)' },
         { scrambled: 'W-R-O-T-E', answer: 'WROTE', hint: '(verbo write en pasado)' },
@@ -119,12 +119,12 @@ const EXERCISES_POOL = {
     }
   ],
 
-  // ==================== 5. REORDER SENTENCES ====================
+  // ==================== 5. REORDER SENTENCES (AUDIO) ====================
   reorderSentences: [
     {
       type: 'reorderSentences',
-      title: 'Ordena las oraciones segun el audio',
-      instructions: 'Escucha el audio y arrastra las oraciones para ordenarlas en el orden correcto en que las escuchas.',
+      title: '🎧 Escucha y ordena las oraciones',
+      instructions: '🔊 Reproduce el audio. En la columna izquierda estan las oraciones desordenadas; arrastralas a los espacios numerados de la derecha en el orden correcto segun lo que escuchas.',
       audioFile: 'files/audio.mp3',
       scrambled: [
         "You wore a terrible dress at the party.",
@@ -143,8 +143,8 @@ const EXERCISES_POOL = {
     },
     {
       type: 'reorderSentences',
-      title: 'Escucha y ordena las oraciones',
-      instructions: 'Reproduce el audio y arrastra las oraciones al orden correcto.',
+      title: '🎧 Audio: ordena en el orden correcto',
+      instructions: '🔊 Escucha el audio y arrastra cada oracion del banco (izquierda) al espacio numerado correspondiente (derecha).',
       audioFile: 'files/audio.mp3',
       scrambled: [
         "Mariana didn't do her homework, oh my god!",
@@ -167,8 +167,8 @@ const EXERCISES_POOL = {
   trueFalse: [
     {
       type: 'trueFalse',
-      title: 'Verdadero o Falso',
-      instructions: 'Lee cada oracion y decide si es gramaticalmente correcta (V) o incorrecta (F) en pasado simple.',
+      title: '✔️❌ Verdadero o Falso',
+      instructions: '🤔 Lee cada oracion y decide si es gramaticalmente correcta (V) o incorrecta (F) en pasado simple.',
       questions: [
         { q: 'She went to the beach last weekend.', answer: true },
         { q: 'They eated breakfast at 7 AM.', answer: false },
@@ -179,8 +179,8 @@ const EXERCISES_POOL = {
     },
     {
       type: 'trueFalse',
-      title: 'Decide: Verdadero o Falso',
-      instructions: 'Indica si cada oracion esta correctamente escrita en pasado simple.',
+      title: '✔️❌ Decide: Verdadero o Falso',
+      instructions: '🤔 Indica si cada oracion esta correctamente escrita en pasado simple.',
       questions: [
         { q: 'Did you went to school yesterday?', answer: false },
         { q: 'My sister bought a new dress.', answer: true },
@@ -195,14 +195,14 @@ const EXERCISES_POOL = {
   wordSearch: [
     {
       type: 'wordSearch',
-      title: 'Sopa de letras: Verbos en pasado',
-      instructions: 'Encuentra los verbos en pasado simple. Arrastra desde la primera letra hasta la ultima (horizontal, vertical o diagonal).',
+      title: '🔍 Sopa de letras: Verbos en pasado',
+      instructions: '🔎 Encuentra los verbos en pasado simple. Arrastra desde la primera letra hasta la ultima (horizontal, vertical o diagonal).',
       words: ['WENT', 'ATE', 'SAW', 'PLAYED', 'RAN', 'BOUGHT', 'WROTE', 'DRANK']
     },
     {
       type: 'wordSearch',
-      title: 'Sopa de letras: Encuentra los pasados',
-      instructions: 'Busca los verbos irregulares en pasado dentro de la cuadricula.',
+      title: '🔍 Sopa de letras: Encuentra los pasados',
+      instructions: '🔎 Busca los verbos irregulares en pasado dentro de la cuadricula. Arrastra desde la primera hasta la ultima letra.',
       words: ['SLEPT', 'TOOK', 'GAVE', 'MADE', 'SAID', 'CAME', 'KNEW', 'FELT']
     }
   ],
@@ -211,8 +211,8 @@ const EXERCISES_POOL = {
   categorization: [
     {
       type: 'categorization',
-      title: 'Clasifica: Regulares vs Irregulares',
-      instructions: 'Arrastra cada verbo en pasado a la columna correcta segun sea regular o irregular.',
+      title: '📦 Clasifica: Regulares vs Irregulares',
+      instructions: '🗂️ Arrastra cada verbo en pasado a la columna correcta segun sea regular (termina en -ed) o irregular.',
       items: [
         { word: 'played', category: 'regular' },
         { word: 'went', category: 'irregular' },
@@ -224,14 +224,14 @@ const EXERCISES_POOL = {
         { word: 'wrote', category: 'irregular' }
       ],
       categories: [
-        { id: 'regular', label: 'Verbos Regulares (-ed)' },
-        { id: 'irregular', label: 'Verbos Irregulares' }
+        { id: 'regular', label: '🟢 Verbos Regulares (-ed)' },
+        { id: 'irregular', label: '🟠 Verbos Irregulares' }
       ]
     },
     {
       type: 'categorization',
-      title: 'Clasifica los verbos en pasado',
-      instructions: 'Separa los verbos regulares de los irregulares arrastrandolos.',
+      title: '📦 Clasifica los verbos en pasado',
+      instructions: '🗂️ Separa los verbos regulares de los irregulares arrastrandolos a cada columna.',
       items: [
         { word: 'visited', category: 'regular' },
         { word: 'bought', category: 'irregular' },
@@ -243,8 +243,8 @@ const EXERCISES_POOL = {
         { word: 'talked', category: 'regular' }
       ],
       categories: [
-        { id: 'regular', label: 'Verbos Regulares (-ed)' },
-        { id: 'irregular', label: 'Verbos Irregulares' }
+        { id: 'regular', label: '🟢 Verbos Regulares (-ed)' },
+        { id: 'irregular', label: '🟠 Verbos Irregulares' }
       ]
     }
   ],
@@ -253,8 +253,8 @@ const EXERCISES_POOL = {
   dropdown: [
     {
       type: 'dropdown',
-      title: 'Menu desplegable: Elige el verbo correcto',
-      instructions: 'Selecciona del menu la forma correcta del verbo para cada oracion.',
+      title: '📋 Menu desplegable: Elige el verbo correcto',
+      instructions: '👇 Selecciona del menu la forma correcta del verbo para cada oracion.',
       sentences: [
         { parts: ['Yesterday I ', ' a book.'], options: ['read', 'reads', 'readed'], answer: 'read' },
         { parts: ['She ', ' to the store last night.'], options: ['goed', 'went', 'goes'], answer: 'went' },
@@ -265,8 +265,8 @@ const EXERCISES_POOL = {
     },
     {
       type: 'dropdown',
-      title: 'Elige la conjugacion correcta',
-      instructions: 'Escoge del menu desplegable la forma correcta en pasado simple.',
+      title: '📋 Elige la conjugacion correcta',
+      instructions: '👇 Escoge del menu desplegable la forma correcta en pasado simple.',
       sentences: [
         { parts: ['My dad ', ' a sandwich for lunch.'], options: ['maked', 'made', 'makes'], answer: 'made' },
         { parts: ['I ', ' tired yesterday.'], options: ['was', 'were', 'am'], answer: 'was' },
@@ -281,8 +281,8 @@ const EXERCISES_POOL = {
   errorIdentification: [
     {
       type: 'errorIdentification',
-      title: 'Identifica el error',
-      instructions: 'Haz clic en la palabra incorrecta de cada oracion.',
+      title: '🚨 Identifica el error',
+      instructions: '🔎 Haz clic en la palabra INCORRECTA de cada oracion (solo una por oracion).',
       sentences: [
         { words: ['I', 'goed', 'to', 'school', 'yesterday.'], wrongIndex: 1 },
         { words: ['She', 'didn\'t', 'went', 'to', 'the', 'party.'], wrongIndex: 2 },
@@ -293,8 +293,8 @@ const EXERCISES_POOL = {
     },
     {
       type: 'errorIdentification',
-      title: 'Encuentra el error gramatical',
-      instructions: 'Haz clic en la palabra que esta mal escrita o mal usada.',
+      title: '🚨 Encuentra el error gramatical',
+      instructions: '🔎 Haz clic en la palabra que esta mal escrita o mal usada en cada oracion.',
       sentences: [
         { words: ['My', 'sister', 'runned', 'in', 'the', 'park.'], wrongIndex: 2 },
         { words: ['Did', 'you', 'saw', 'the', 'movie?'], wrongIndex: 2 },
@@ -309,8 +309,8 @@ const EXERCISES_POOL = {
   emojiSentence: [
     {
       type: 'emojiSentence',
-      title: 'Crea oraciones en pasado con los emojis',
-      instructions: 'Escribe una oracion en pasado simple que describa cada conjunto de emojis. Ejemplo: 🍕👦 = "The boy ate pizza yesterday."',
+      title: '😊 Crea oraciones en pasado con emojis',
+      instructions: '💭 Escribe una oracion en pasado simple que describa cada conjunto de emojis. Ejemplo: 🍕👦 = "The boy ate pizza yesterday."',
       prompts: [
         { emojis: '⚽🏃‍♂️', hint: 'Usar play / run' },
         { emojis: '📚👧', hint: 'Usar read / study' },
@@ -320,8 +320,8 @@ const EXERCISES_POOL = {
     },
     {
       type: 'emojiSentence',
-      title: 'Describe con oraciones en pasado',
-      instructions: 'Escribe una oracion completa en pasado simple basada en los emojis. Ejemplo: 🎵🎧 = "He listened to music last night."',
+      title: '😊 Describe con oraciones en pasado',
+      instructions: '💭 Escribe una oracion completa en pasado simple basada en los emojis. Ejemplo: 🎵🎧 = "He listened to music last night."',
       prompts: [
         { emojis: '🍔🍟', hint: 'Usar eat / buy' },
         { emojis: '✈️🏖️', hint: 'Usar travel / go' },
@@ -335,8 +335,8 @@ const EXERCISES_POOL = {
   matchImages: [
     {
       type: 'matchImages',
-      title: 'Empareja la oracion con la imagen',
-      instructions: 'Arrastra cada oracion en pasado a la imagen correspondiente.',
+      title: '🖼️ Empareja la oracion con la imagen',
+      instructions: '👆 Arrastra cada oracion en pasado hacia la imagen correspondiente.',
       items: [
         { image: 'files/babyboycrying.jpg', text: 'The baby cried a lot.', alt: 'bebe llorando' },
         { image: 'files/girlreadingbook.jpg', text: 'She read a book.', alt: 'nina leyendo' },
@@ -346,8 +346,8 @@ const EXERCISES_POOL = {
     },
     {
       type: 'matchImages',
-      title: 'Une la imagen con la accion en pasado',
-      instructions: 'Arrastra las oraciones a la imagen que corresponda.',
+      title: '🖼️ Une la imagen con la accion en pasado',
+      instructions: '👆 Arrastra las oraciones a la imagen que corresponda.',
       items: [
         { image: 'files/girlrunning.jpg', text: 'She ran fast.', alt: 'nina corriendo' },
         { image: 'files/boydrinkinglemonade.jpg', text: 'He drank lemonade.', alt: 'nino bebiendo' },
@@ -361,8 +361,8 @@ const EXERCISES_POOL = {
   matchingLines: [
     {
       type: 'matchingLines',
-      title: 'Une con lineas: presente y pasado',
-      instructions: 'Toca una palabra de la izquierda y luego su pasado correspondiente a la derecha para unirlas.',
+      title: '📏 Une con lineas: presente y pasado',
+      instructions: '👉 Toca una palabra de la izquierda y luego su pasado correspondiente a la derecha para unirlas con una linea.',
       pairs: [
         { left: 'go', right: 'went' },
         { left: 'eat', right: 'ate' },
@@ -373,8 +373,8 @@ const EXERCISES_POOL = {
     },
     {
       type: 'matchingLines',
-      title: 'Empareja con lineas: verbo base y pasado',
-      instructions: 'Toca el verbo en la izquierda y luego su forma en pasado a la derecha.',
+      title: '📏 Empareja con lineas: verbo base y pasado',
+      instructions: '👉 Toca el verbo en la izquierda y luego su forma en pasado a la derecha.',
       pairs: [
         { left: 'run', right: 'ran' },
         { left: 'drink', right: 'drank' },
@@ -386,13 +386,11 @@ const EXERCISES_POOL = {
   ]
 };
 
-// Funcion para obtener una version aleatoria de cada tipo
 function getRandomExercise(type) {
   const pool = EXERCISES_POOL[type];
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
-// Selector de ejercicios final (minimo 8 ejercicios variados)
 function getExercisesList() {
   return [
     getRandomExercise('multipleChoice'),

@@ -600,98 +600,181 @@ function renderUnscrambleWords(ex, idx, container) {
 function renderReorderSentences(ex, idx, container) {
   const answerKey = `ex${idx}`;
 
+  // Estructura del estado: { slots: [null, null, ...] } donde cada slot contiene la oración o null
+  if (!state.answers[answerKey] || !state.answers[answerKey].slots) {
+    state.answers[answerKey] = { slots: new Array(ex.scrambled.length).fill(null) };
+  }
+
+  // Audio
   if (ex.audioFile) {
     const audioDiv = document.createElement('div');
     audioDiv.className = 'audio-player';
     audioDiv.innerHTML = `
-      <p>🔊 Escucha el audio tantas veces como necesites:</p>
+      <p>🔊 Escucha el audio las veces que necesites</p>
       <audio controls controlsList="nodownload" src="${ex.audioFile}"></audio>
     `;
     container.appendChild(audioDiv);
   }
 
-  // Orden guardado o inicial
-  let currentOrder = state.answers[answerKey] && state.answers[answerKey].order
-    ? state.answers[answerKey].order
-    : [...ex.scrambled];
+  // Contenedor de dos columnas
+  const dual = document.createElement('div');
+  dual.className = 'reorder-dual';
+  dual.dataset.exerciseIdx = idx;
 
-  const list = document.createElement('div');
-  list.className = 'reorder-list';
-  list.dataset.exerciseIdx = idx;
+  // COLUMNA IZQUIERDA: Banco de oraciones
+  const bankCol = document.createElement('div');
+  bankCol.className = 'reorder-column bank-col';
+  const bankTitle = document.createElement('div');
+  bankTitle.className = 'reorder-col-title bank-title';
+  bankTitle.textContent = '📦 Banco de oraciones';
+  bankCol.appendChild(bankTitle);
 
-  function renderList() {
-    list.innerHTML = '';
-    currentOrder.forEach((sentence, si) => {
-      const item = document.createElement('div');
-      item.className = 'reorder-item';
-      item.textContent = `${si + 1}. ${sentence}`;
-      item.dataset.sentence = sentence;
-      item.dataset.position = si;
-      setupReorderItem(item, list, idx);
-      list.appendChild(item);
-    });
+  const bankList = document.createElement('div');
+  bankList.className = 'reorder-list';
+  bankList.dataset.role = 'bank';
+  bankList.dataset.exerciseIdx = idx;
+  bankCol.appendChild(bankList);
+
+  // Llenar el banco con las oraciones desordenadas
+  ex.scrambled.forEach((sentence, si) => {
+    const item = document.createElement('div');
+    item.className = 'reorder-sentence';
+    item.textContent = sentence;
+    item.dataset.sentence = sentence;
+    setupReorderItem(item, idx);
+    bankList.appendChild(item);
+  });
+
+  // COLUMNA DERECHA: Slots numerados
+  const slotsCol = document.createElement('div');
+  slotsCol.className = 'reorder-column slots-col';
+  const slotsTitle = document.createElement('div');
+  slotsTitle.className = 'reorder-col-title slots-title';
+  slotsTitle.textContent = '🎯 Orden correcto';
+  slotsCol.appendChild(slotsTitle);
+
+  const slotsList = document.createElement('div');
+  slotsList.className = 'reorder-list';
+  slotsList.dataset.role = 'slots';
+  slotsList.dataset.exerciseIdx = idx;
+
+  for (let i = 0; i < ex.scrambled.length; i++) {
+    const slot = document.createElement('div');
+    slot.className = 'reorder-slot';
+    slot.dataset.slotIdx = i;
+    slot.dataset.exerciseIdx = idx;
+
+    const num = document.createElement('div');
+    num.className = 'reorder-slot-number';
+    num.textContent = i + 1;
+    slot.appendChild(num);
+
+    const content = document.createElement('div');
+    content.className = 'reorder-slot-content';
+    slot.appendChild(content);
+
+    setupReorderSlot(slot, idx);
+    slotsList.appendChild(slot);
   }
+  slotsCol.appendChild(slotsList);
 
-  renderList();
-  container.appendChild(list);
+  dual.appendChild(bankCol);
+  dual.appendChild(slotsCol);
+  container.appendChild(dual);
 
-  state.answers[answerKey] = { order: currentOrder };
-  saveState();
-
-  // Función para cuando se suelta un item
-  list._onReorder = () => {
-    const newOrder = Array.from(list.querySelectorAll('.reorder-item')).map(el => el.dataset.sentence);
-    state.answers[answerKey] = { order: newOrder };
-    currentOrder = newOrder;
-    renderList();
+  // Botón de reinicio
+  const resetBtn = document.createElement('button');
+  resetBtn.className = 'reorder-reset';
+  resetBtn.textContent = '🔄 Reiniciar ejercicio';
+  resetBtn.addEventListener('click', () => {
+    state.answers[answerKey] = { slots: new Array(ex.scrambled.length).fill(null) };
+    // Devolver todas las oraciones al banco
+    slotsList.querySelectorAll('.reorder-sentence').forEach(s => {
+      s.classList.remove('placed');
+    });
+    slotsList.querySelectorAll('.reorder-slot-content').forEach(c => c.innerHTML = '');
+    slotsList.querySelectorAll('.reorder-slot').forEach(s => s.classList.remove('filled'));
+    bankList.querySelectorAll('.reorder-sentence').forEach(s => s.classList.remove('used'));
+    // Mover sentencias al banco (reconstruir)
+    rebuildBank(bankList, ex.scrambled, idx);
     saveState();
-  };
+  });
+  container.appendChild(resetBtn);
+
+  // Restaurar estado guardado
+  setTimeout(() => restoreReorderState(bankList, slotsList, ex, idx), 50);
 }
 
-function setupReorderItem(item, list, idx) {
+function rebuildBank(bankList, scrambled, idx) {
+  bankList.innerHTML = '';
+  scrambled.forEach(sentence => {
+    const item = document.createElement('div');
+    item.className = 'reorder-sentence';
+    item.textContent = sentence;
+    item.dataset.sentence = sentence;
+    setupReorderItem(item, idx);
+    bankList.appendChild(item);
+  });
+}
+
+function restoreReorderState(bankList, slotsList, ex, idx) {
+  const answerKey = `ex${idx}`;
+  const slots = state.answers[answerKey].slots || [];
+  slots.forEach((sentence, si) => {
+    if (!sentence) return;
+    const slot = slotsList.querySelector(`.reorder-slot[data-slot-idx="${si}"]`);
+    if (!slot) return;
+    const content = slot.querySelector('.reorder-slot-content');
+    const sourceEl = bankList.querySelector(`.reorder-sentence[data-sentence="${CSS.escape(sentence)}"]:not(.used)`);
+    if (sourceEl && content) {
+      // Crear una copia en el slot y marcar original como usado
+      const placed = sourceEl.cloneNode(true);
+      placed.classList.add('placed');
+      setupReorderItem(placed, idx);
+      content.appendChild(placed);
+      slot.classList.add('filled');
+      sourceEl.classList.add('used');
+    }
+  });
+}
+
+function setupReorderItem(item, exerciseIdx) {
   item.draggable = true;
   let clone = null;
   let touchActive = false;
 
   item.addEventListener('dragstart', e => {
+    if (item.classList.contains('used')) {
+      e.preventDefault();
+      return;
+    }
     item.classList.add('dragging');
     window._reorderDragEl = item;
+    window._reorderExIdx = exerciseIdx;
     e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', item.dataset.sentence);
   });
   item.addEventListener('dragend', () => {
     item.classList.remove('dragging');
     window._reorderDragEl = null;
   });
-  item.addEventListener('dragover', e => {
-    e.preventDefault();
-    const dragged = window._reorderDragEl;
-    if (!dragged || dragged === item) return;
-    const rect = item.getBoundingClientRect();
-    const after = e.clientY > rect.top + rect.height / 2;
-    if (after) {
-      item.parentNode.insertBefore(dragged, item.nextSibling);
-    } else {
-      item.parentNode.insertBefore(dragged, item);
-    }
-  });
-  item.addEventListener('drop', () => {
-    if (list._onReorder) list._onReorder();
-  });
 
   // Touch
   item.addEventListener('touchstart', e => {
+    if (item.classList.contains('used')) return;
     if (e.touches.length !== 1) return;
     touchActive = true;
+    window._reorderDragEl = item;
+    window._reorderExIdx = exerciseIdx;
     const touch = e.touches[0];
     const rect = item.getBoundingClientRect();
     clone = item.cloneNode(true);
     clone.classList.add('drag-clone');
     clone.style.width = rect.width + 'px';
-    clone.style.left = rect.left + 'px';
+    clone.style.left = (touch.clientX - rect.width / 2) + 'px';
     clone.style.top = (touch.clientY - rect.height / 2) + 'px';
     document.body.appendChild(clone);
     item.style.opacity = '0.3';
-    window._reorderDragEl = item;
     startAutoScroll();
   }, { passive: true });
 
@@ -700,32 +783,40 @@ function setupReorderItem(item, list, idx) {
     e.preventDefault();
     const touch = e.touches[0];
     const rect = clone.getBoundingClientRect();
+    clone.style.left = (touch.clientX - rect.width / 2) + 'px';
     clone.style.top = (touch.clientY - rect.height / 2) + 'px';
     window._dragY = touch.clientY;
 
-    // Detectar posición
+    // Resaltar zonas
+    document.querySelectorAll('.reorder-slot, .reorder-list[data-role="bank"]').forEach(z => {
+      z.classList.remove('drag-over');
+    });
     clone.style.display = 'none';
     const below = document.elementFromPoint(touch.clientX, touch.clientY);
     clone.style.display = '';
-    const overItem = below?.closest('.reorder-item');
-    if (overItem && overItem !== item && overItem.parentNode === list) {
-      const rect2 = overItem.getBoundingClientRect();
-      const after = touch.clientY > rect2.top + rect2.height / 2;
-      if (after) {
-        list.insertBefore(item, overItem.nextSibling);
-      } else {
-        list.insertBefore(item, overItem);
-      }
-    }
+    const dropTarget = below?.closest('.reorder-slot, .reorder-list[data-role="bank"]');
+    if (dropTarget) dropTarget.classList.add('drag-over');
   }, { passive: false });
 
-  item.addEventListener('touchend', () => {
+  item.addEventListener('touchend', e => {
     if (!touchActive) return;
     touchActive = false;
     item.style.opacity = '';
-    if (clone) { clone.remove(); clone = null; }
     stopAutoScroll();
-    if (list._onReorder) list._onReorder();
+
+    const touch = e.changedTouches[0];
+    if (clone) clone.style.display = 'none';
+    const below = document.elementFromPoint(touch.clientX, touch.clientY);
+    if (clone) { clone.remove(); clone = null; }
+
+    document.querySelectorAll('.reorder-slot, .reorder-list[data-role="bank"]').forEach(z => {
+      z.classList.remove('drag-over');
+    });
+
+    const dropTarget = below?.closest(`.reorder-slot[data-exercise-idx="${exerciseIdx}"], .reorder-list[data-role="bank"][data-exercise-idx="${exerciseIdx}"]`);
+    if (dropTarget) {
+      handleReorderDrop(dropTarget, item, exerciseIdx);
+    }
     window._reorderDragEl = null;
   });
 
@@ -734,7 +825,93 @@ function setupReorderItem(item, list, idx) {
     item.style.opacity = '';
     if (clone) { clone.remove(); clone = null; }
     stopAutoScroll();
+    document.querySelectorAll('.reorder-slot, .reorder-list[data-role="bank"]').forEach(z => {
+      z.classList.remove('drag-over');
+    });
   });
+}
+
+function setupReorderSlot(slot, exerciseIdx) {
+  slot.addEventListener('dragover', e => {
+    e.preventDefault();
+    slot.classList.add('drag-over');
+  });
+  slot.addEventListener('dragleave', () => {
+    slot.classList.remove('drag-over');
+  });
+  slot.addEventListener('drop', e => {
+    e.preventDefault();
+    slot.classList.remove('drag-over');
+    const el = window._reorderDragEl;
+    if (el && window._reorderExIdx === exerciseIdx) {
+      handleReorderDrop(slot, el, exerciseIdx);
+    }
+  });
+}
+
+function handleReorderDrop(target, draggedEl, exerciseIdx) {
+  const answerKey = `ex${exerciseIdx}`;
+  if (!state.answers[answerKey]) state.answers[answerKey] = { slots: [] };
+  const dual = document.querySelector(`.reorder-dual[data-exercise-idx="${exerciseIdx}"]`);
+  if (!dual) return;
+  const bankList = dual.querySelector('.reorder-list[data-role="bank"]');
+  const slotsList = dual.querySelector('.reorder-list[data-role="slots"]');
+  const sentence = draggedEl.dataset.sentence;
+
+  // Determinar de dónde viene el elemento arrastrado
+  const fromSlot = draggedEl.parentElement?.closest('.reorder-slot');
+  const isFromBank = bankList.contains(draggedEl);
+
+  if (target.classList.contains('reorder-slot')) {
+    // Soltando en un slot
+    const slotIdx = parseInt(target.dataset.slotIdx);
+    const content = target.querySelector('.reorder-slot-content');
+
+    // Si el slot ya tiene algo, devolverlo al banco
+    const existing = content.querySelector('.reorder-sentence');
+    if (existing && existing !== draggedEl) {
+      const existingSentence = existing.dataset.sentence;
+      existing.remove();
+      target.classList.remove('filled');
+      // Desmarcar "used" en el banco
+      const bankItem = bankList.querySelector(`.reorder-sentence[data-sentence="${CSS.escape(existingSentence)}"]`);
+      if (bankItem) bankItem.classList.remove('used');
+      // Borrar del estado
+      state.answers[answerKey].slots[slotIdx] = null;
+    }
+
+    if (isFromBank) {
+      // Clonar para mantener el item en el banco pero marcarlo como usado
+      const placed = draggedEl.cloneNode(true);
+      placed.classList.add('placed');
+      placed.classList.remove('used');
+      setupReorderItem(placed, exerciseIdx);
+      content.appendChild(placed);
+      draggedEl.classList.add('used');
+      target.classList.add('filled');
+      state.answers[answerKey].slots[slotIdx] = sentence;
+    } else if (fromSlot) {
+      // Moviendo de un slot a otro
+      const prevSlotIdx = parseInt(fromSlot.dataset.slotIdx);
+      state.answers[answerKey].slots[prevSlotIdx] = null;
+      fromSlot.classList.remove('filled');
+      content.appendChild(draggedEl);
+      target.classList.add('filled');
+      state.answers[answerKey].slots[slotIdx] = sentence;
+    }
+  } else if (target.classList.contains('reorder-list') && target.dataset.role === 'bank') {
+    // Devolviendo al banco
+    if (fromSlot) {
+      const prevSlotIdx = parseInt(fromSlot.dataset.slotIdx);
+      state.answers[answerKey].slots[prevSlotIdx] = null;
+      fromSlot.classList.remove('filled');
+      draggedEl.remove();
+      // Desmarcar el item del banco
+      const bankItem = bankList.querySelector(`.reorder-sentence[data-sentence="${CSS.escape(sentence)}"]`);
+      if (bankItem) bankItem.classList.remove('used');
+    }
+  }
+  saveState();
 }
 
 // ============ 6. TRUE / FALSE ============
@@ -1616,9 +1793,9 @@ function calculateExerciseScore(ex, idx) {
       break;
     case 'reorderSentences':
       total = ex.correctOrder.length;
-      const order = answers.order || [];
+      const slots = answers.slots || [];
       ex.correctOrder.forEach((s, si) => {
-        if (order[si] === s) correct++;
+        if (slots[si] === s) correct++;
       });
       break;
     case 'trueFalse':
@@ -1971,9 +2148,10 @@ function addExerciseDetails(doc, ex, idx, y, margin, pageW, pageH) {
       break;
     case 'reorderSentences':
       writeLine('Orden del estudiante:');
-      (answers.order || []).forEach((s, si) => {
+      (answers.slots || []).forEach((s, si) => {
+        const userSentence = s || '(vacio)';
         const ok = s === ex.correctOrder[si];
-        writeLine(`   ${si + 1}. ${s} ${ok ? '[V]' : '[X]'}`, 2, ok ? [76,175,80] : [244,67,54]);
+        writeLine(`   ${si + 1}. ${userSentence} ${ok ? '[V]' : '[X]'}`, 2, ok ? [76,175,80] : [244,67,54]);
       });
       writeLine('Orden correcto:');
       ex.correctOrder.forEach((s, si) => {
